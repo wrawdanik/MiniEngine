@@ -1,0 +1,11 @@
+
+
+.DS_Store
+
+.idea/ 
+*~
+*.swp
+platform/osx/xcode
+platform/windows/visual_project
+
+build/**/* 
