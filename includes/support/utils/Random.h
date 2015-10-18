@@ -14,9 +14,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdint.h>
-#ifdef APPLE
-#include <sys/time.h>
-#endif
 #include "tinymt32.h"
 
 
@@ -27,14 +24,7 @@ namespace MiniEngine
     {
     public:
         
-        Random()
-        {
-#ifdef APPLE
-            struct timeval t1;
-            gettimeofday(&t1, NULL);
-            tinymt32_init(&tinymt,(uint32_t)time(0));
-#endif
-        }
+        Random();
         
         Random(uint32_t seed)
         {

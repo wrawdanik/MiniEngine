@@ -1,6 +1,13 @@
 #include "Random.h"
 #include <limits>
+#include "StopTimer.h"
 using namespace MiniEngine;
+
+Random::Random()
+{
+    tinymt32_init(&tinymt, (uint32_t)StopTimer::systemTime());
+
+}
 
 unsigned int Random::rand(uint32_t min, uint32_t max)
 {

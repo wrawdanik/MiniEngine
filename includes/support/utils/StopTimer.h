@@ -28,7 +28,7 @@ namespace MiniEngine
 
         inline uint64_t precision() const { return HighResClock::period::den; }
 
-        inline uint64_t systemTime() const
+        static inline uint64_t systemTime()
         {
             return chrono::duration_cast<std::chrono::duration<std::uint64_t>>(HighResClock::now().time_since_epoch()).count();
         }
