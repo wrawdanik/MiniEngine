@@ -15,6 +15,8 @@ namespace Catch {
 
 namespace Detail {
 
+    std::string unprintableString = "{?}";
+
     namespace {
         struct Endianness {
             enum Arch { Big, Little };
@@ -73,7 +75,7 @@ std::string toString( std::wstring const& value ) {
     s.reserve( value.size() );
     for(size_t i = 0; i < value.size(); ++i )
         s += value[i] <= 0xff ? static_cast<char>( value[i] ) : '?';
-    return toString( s );
+    return Catch::toString( s );
 }
 
 std::string toString( const char* const value ) {
@@ -84,23 +86,34 @@ std::string toString( char* const value ) {
     return Catch::toString( static_cast<const char*>( value ) );
 }
 
+std::string toString( const wchar_t* const value )
+{
+	return value ? Catch::toString( std::wstring(value) ) : std::string( "{null string}" );
+}
+
+std::string toString( wchar_t* const value )
+{
+	return Catch::toString( static_cast<const wchar_t*>( value ) );
+}
+
 std::string toString( int value ) {
     std::ostringstream oss;
     oss << value;
+    if( value >= 255 )
+        oss << " (0x" << std::hex << value << ")";
     return oss.str();
 }
 
 std::string toString( unsigned long value ) {
     std::ostringstream oss;
-    if( value > 8192 )
-        oss << "0x" << std::hex << value;
-    else
-        oss << value;
+    oss << value;
+    if( value >= 255 )
+        oss << " (0x" << std::hex << value << ")";
     return oss.str();
 }
 
 std::string toString( unsigned int value ) {
-    return toString( static_cast<unsigned long>( value ) );
+    return Catch::toString( static_cast<unsigned long>( value ) );
 }
 
 template<typename T>

@@ -9,13 +9,19 @@
 #ifndef TWOBLUECUBES_CATCH_HPP_INCLUDED
 #define TWOBLUECUBES_CATCH_HPP_INCLUDED
 
-#include "internal/catch_suppress_warnings.h"
-
-#ifdef CATCH_CONFIG_MAIN
-#  define CATCH_CONFIG_RUNNER
+#ifdef __clang__
+#    pragma clang system_header
+#elif defined __GNUC__
+#    pragma GCC system_header
 #endif
 
-#ifdef CATCH_CONFIG_RUNNER
+#include "internal/catch_suppress_warnings.h"
+
+#if defined(CATCH_CONFIG_MAIN) || defined(CATCH_CONFIG_RUNNER)
+#  define CATCH_IMPL
+#endif
+
+#ifdef CATCH_IMPL
 #  ifndef CLARA_CONFIG_MAIN
 #    define CLARA_CONFIG_MAIN_NOT_DEFINED
 #    define CLARA_CONFIG_MAIN
@@ -43,7 +49,7 @@
 #include "internal/catch_objc.hpp"
 #endif
 
-#ifdef CATCH_CONFIG_RUNNER
+#ifdef CATCH_IMPL
 #include "internal/catch_impl.hpp"
 #endif
 
@@ -112,8 +118,10 @@
 // "BDD-style" convenience wrappers
 #ifdef CATCH_CONFIG_VARIADIC_MACROS
 #define CATCH_SCENARIO( ... ) CATCH_TEST_CASE( "Scenario: " __VA_ARGS__ )
+#define CATCH_SCENARIO_METHOD( className, ... ) INTERNAL_CATCH_TEST_CASE_METHOD( className, "Scenario: " __VA_ARGS__ )
 #else
 #define CATCH_SCENARIO( name, tags ) CATCH_TEST_CASE( "Scenario: " name, tags )
+#define CATCH_SCENARIO_METHOD( className, name, tags ) INTERNAL_CATCH_TEST_CASE_METHOD( className, "Scenario: " name, tags )
 #endif
 #define CATCH_GIVEN( desc )    CATCH_SECTION( "Given: " desc, "" )
 #define CATCH_WHEN( desc )     CATCH_SECTION( " When: " desc, "" )
@@ -179,8 +187,10 @@
 // "BDD-style" convenience wrappers
 #ifdef CATCH_CONFIG_VARIADIC_MACROS
 #define SCENARIO( ... ) TEST_CASE( "Scenario: " __VA_ARGS__ )
+#define SCENARIO_METHOD( className, ... ) INTERNAL_CATCH_TEST_CASE_METHOD( className, "Scenario: " __VA_ARGS__ )
 #else
 #define SCENARIO( name, tags ) TEST_CASE( "Scenario: " name, tags )
+#define SCENARIO_METHOD( className, name, tags ) INTERNAL_CATCH_TEST_CASE_METHOD( className, "Scenario: " name, tags )
 #endif
 #define GIVEN( desc )    SECTION( "   Given: " desc, "" )
 #define WHEN( desc )     SECTION( "    When: " desc, "" )

@@ -8,6 +8,8 @@ if(APPLE)
 	set (CMAKE_CXX_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden -std=c++11 -fno-exceptions" )
 elseif(WIN32)	
 	add_definitions(-DMINIENGINE_PLATFORM_WINDOWS)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+	
 endif()
 
 SUBDIRS(source/) 

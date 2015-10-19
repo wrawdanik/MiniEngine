@@ -2,14 +2,14 @@
 
 
 include_directories(
-	/Users/wrawdanik/Development/MiniEngine/includes/third_party/tiny_mt
-	/Users/wrawdanik/Development/MiniEngine/includes/third_party/rdestl 
-	/Users/wrawdanik/Development/MiniEngine/includes/third_party/catch 	
-	/Users/wrawdanik/Development/MiniEngine/includes/third_party/concurrentqueue
-	/Users/wrawdanik/Development/MiniEngine/includes/support/utils
-	/Users/wrawdanik/Development/MiniEngine/includes/support
-		/Users/wrawdanik/Development/MiniEngine/includes/platform/${MINIENGINE_PLATFORM}
-		/Users/wrawdanik/Development/MiniEngine/includes/platform
+	${CMAKE_SOURCE_DIR}/includes/third_party/tiny_mt
+	${CMAKE_SOURCE_DIR}/includes/third_party/rdestl 
+	${CMAKE_SOURCE_DIR}/includes/third_party/catch 	
+	${CMAKE_SOURCE_DIR}/includes/third_party/concurrentqueue
+	${CMAKE_SOURCE_DIR}/includes/support/utils
+	${CMAKE_SOURCE_DIR}/includes/support
+		${CMAKE_SOURCE_DIR}/includes/platform/${MINIENGINE_PLATFORM}
+		${CMAKE_SOURCE_DIR}/includes/platform
 )
 
 
@@ -18,11 +18,11 @@ file(
 	"*.cpp"	
 )
 
-
+if(MINIENGINE_PLATFORM_OSX)
 SET(CMAKE_EXE_LINKER_FLAGS "-framework Foundation -framework SystemConfiguration -framework CoreFoundation")
-
+endif()
 
 add_executable(Platform_Test  ${SOURCES} )
-target_link_libraries(Platform_Test Platform Support Tasks)
+target_link_libraries(Platform_Test Platform Support )
 
 
