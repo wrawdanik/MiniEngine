@@ -16,6 +16,8 @@ namespace MiniEngine
 {
     class RenderManager;
 
+
+
 	class VertexAttributeData
 	{
 
@@ -35,9 +37,10 @@ namespace MiniEngine
             mData.normalized=(normalized) ? 1 : 0;
             mData.clientSide=(clientSide) ? 1 : 0;
             mData.enabled=(enabled) ? 1 : 0;
+            mData.elementSize=DataTypes::sizeInBytes(type);
         }
         
-        inline size_t sizeInBytes(size_t alignmentBytes=Platform::vertexAlignment()) const
+        inline size_t sizeInBytes(size_t alignmentBytes=RenderDefaults::vertexAlignment()) const
         {
             if(alignmentBytes==1)
                 return mData.elementCount*mData.elementSize;
@@ -56,6 +59,7 @@ namespace MiniEngine
         inline bool         clientSide() const { return (mData.clientSide!=0);}
         inline bool         enabled() const { return (mData.enabled!=0);}
         inline bool         normalized() const { return (mData.normalized!=0);}
+
 
 
 
@@ -80,7 +84,9 @@ namespace MiniEngine
         AttributeData mData;
     };
 
+
     using VertexAttributeDataArray=rde::vector<VertexAttributeData>;
+
 
 /** 
 * @class VertexAttributesList
@@ -138,6 +144,17 @@ namespace MiniEngine
         }
 
 
+
+        static const VertexAttributeDataArray Position;
+        static const VertexAttributeDataArray PositionColor;
+        static const VertexAttributeDataArray PositionNormal;
+        static const VertexAttributeDataArray PositionNormalColor;
+        static const VertexAttributeDataArray PositionNormalUV1;
+        static const VertexAttributeDataArray PositionNormalUV2;
+        static const VertexAttributeDataArray PositionUV1;
+        static const VertexAttributeDataArray PositionUV2;
+
+
     private:
 
         VertexAttributeData mData;
@@ -184,25 +201,12 @@ namespace MiniEngine
         inline size_t sizeInBytes() const { return mStride;}
 
 
-        static void addColor(VertexAttributeArray &array);
-        static void addPosition(VertexAttributeArray &array);
-        static void addNormal(VertexAttributeArray &array);
-        static void addUV(VertexAttributeArray &array);
+
         
         
         static void calculateStrideAndIndex(VertexAttributeArray &array);
         
-        static VertexAttributeArray createPosition();
-        static VertexAttributeArray createPositionColor();
-        static VertexAttributeArray createPositionNormal();
-        static VertexAttributeArray createPositionNormalColor();
-        static VertexAttributeArray createPositionNormalUV1();
 
-        static const VertexAttributeArray Position;
-        static const VertexAttributeArray PositionColor;
-        static const VertexAttributeArray PositionNormal;
-        static const VertexAttributeArray PositionNormalColor;
-        static const VertexAttributeArray PositionNormalUV1;
         
 
         void updateAfterModification();

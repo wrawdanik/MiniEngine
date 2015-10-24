@@ -4,6 +4,7 @@
 #include "Task.h"
 #include "DataTypes.h"
 #include "UserTask.h"
+#include "RenderDefaults.h"
 
 #ifndef MINIENGINE_RENDERTASK_H_H
 #define MINIENGINE_RENDERTASK_H_H
@@ -90,7 +91,7 @@ namespace MiniEngine
             mData.value=0;
         }
 
-        inline static ResourceRequest * createAllocateRequest(ResourceRequest *request,RenderResourceId resourceId,ResourceType  type,RenderBufferMode  mode,size_t sizeInBytes, size_t instanceCount=Platform::backendBufferInstances())
+        inline static ResourceRequest * createAllocateRequest(ResourceRequest *request,RenderResourceId resourceId,ResourceType  type,RenderBufferMode  mode,size_t sizeInBytes, size_t instanceCount=RenderDefaults::backendBufferInstances())
         {
             if(request!= nullptr)
             {

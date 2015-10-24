@@ -5,15 +5,18 @@ project(MiniEngine)
 
 if(APPLE)
 	add_definitions(-DMINIENGINE_PLATFORM_OSX)
+	set (MINIENGINE_PLATFORM_OSX TRUE)
 	set (CMAKE_CXX_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden -std=c++11 -fno-exceptions" )
-elseif(WIN32)	
+elseif(WIN32)
+	set (MINIENGINE_PLATFORM_WINDOWS TRUE)
 	add_definitions(-DMINIENGINE_PLATFORM_WINDOWS)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-	
 endif()
+
 
 SUBDIRS(source/) 
 SUBDIRS(tests)
+SUBDIRS(examples)
 
 get_directory_property(${MINIENGINE_PLATFORM} DIRECTORY source VARIABLES MINIENGINE_PLATFORM)
 

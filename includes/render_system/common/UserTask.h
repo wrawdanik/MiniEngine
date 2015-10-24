@@ -86,8 +86,9 @@ namespace MiniEngine
         }
 
     private:
-        UserTaskFutureImpl(RenderManager *manager,TaskId taskId,void *data,RenderResourceId id,Status::Code code):mManagerProxy(manager),
-                                                                                                                  mTaskId(taskId),mId(id),mCode(code),mData(data)
+        UserTaskFutureImpl(RenderManager *manager,TaskId taskId,void *data,RenderResourceId id,Status::Code code,
+        uint64_t finishBy):mManagerProxy(manager),
+                    mTaskId(taskId),mId(id),mCode(code),mData(data),mFinishByFrame(finishBy)
         {
 
         }
@@ -98,6 +99,7 @@ namespace MiniEngine
         }
         RenderManagerProxy mManagerProxy;
         TaskId mTaskId;
+        uint64_t mFinishByFrame;
         RenderResourceId mId;
         Status::Code mCode;
         void *mData;

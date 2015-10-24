@@ -12,12 +12,22 @@
 #include <unordered_map>
 
 #include "random.h"
+#include "VertexAttributes.h"
 
 using namespace MiniEngine;
 
 
 int main ()
 {
+
+    int bla=20;
+
+
+    VertexAttributeDataArray posData=VertexAttribute::PositionNormalUV2;
+
+
+    int bla2=20;
+
     /*
     testFunctionRdeVector();
     testFunctionStlVector();

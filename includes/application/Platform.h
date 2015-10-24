@@ -16,8 +16,7 @@ namespace MiniEngine
     public:
         Platform();
 
-        static constexpr size_t vertexAlignment();
-        static constexpr size_t backendBufferInstances();
+
 
 
         rde::string computerName();

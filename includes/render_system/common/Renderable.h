@@ -14,9 +14,7 @@ namespace MiniEngine
     class Renderable:public Resource
     {
     public:
-        
-        Renderable(RenderManager *manager);
-        virtual ~Renderable()=0;
+
         
         
         inline VertexBufferPtr vertexBuffer() { return mVBuffer;}
@@ -32,7 +30,9 @@ namespace MiniEngine
         }
 
         StatusPtr createRenderable(const VertexBufferDescriptor &vertexDesc,const IndexBufferDescriptor &indexDesc=IndexBufferDescriptor());
-                
+
+        Renderable(RenderManager *manager);
+        virtual ~Renderable()=default;
         
     private:
         VertexBufferPtr mVBuffer;

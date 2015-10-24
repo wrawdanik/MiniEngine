@@ -24,7 +24,8 @@ namespace MiniEngine
             InvalidState,
             InvalidResourceId,
             CommunicationError,
-            Aborted
+            Aborted,
+            Failure
         };
         Status()
         {

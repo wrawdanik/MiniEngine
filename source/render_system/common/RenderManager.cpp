@@ -2,21 +2,33 @@
 #include "RenderManager.h"
 #include "Log.h"
 #include "RenderBackendManagerMemoryTest.h"
+#include "TaskQueue.h"
+
 
 using namespace MiniEngine;
 
 
-RenderManager::RenderManager(const RenderManagerDescriptor &descriptor):mDescriptor(descriptor),
+RenderManager::RenderManager(const RenderManagerDescriptor &descriptor,RenderTargetPtr defaultTarget):mDescriptor(descriptor),
                                                                         mBackendTaskPool(descriptor.InitialCommunicationObjectsPoolSize,descriptor.CommunicationObjectsPoolGrowth),
-                                                                        mResourceRequestPool(descriptor.InitialCommunicationObjectsPoolSize,descriptor.CommunicationObjectsPoolGrowth),
-                                                                        mRequestQueue(descriptor.InitialCommunicationQueueSize),
-                                                                        mResponseQueue(descriptor.InitialCommunicationQueueSize)
+                                                                        mResourceRequestPool(descriptor.InitialCommunicationObjectsPoolSize,descriptor.CommunicationObjectsPoolGrowth)
 {
     mLastResourceId=mLastTaskId=0;
     mBackendManager=new RenderBackendManagerMemoryTest();
     mTaskBuffer.reserve(descriptor.InitialCommunicationQueueSize);
+    mRequestQueue=new TaskQueue(descriptor.InitialCommunicationQueueSize);
+    mResponseQueue=new TaskQueue(descriptor.InitialCommunicationQueueSize);
+}
+RenderManager::~RenderManager()
+{
+    delete mRequestQueue;
+    delete mResponseQueue;
 }
 
+
+void RenderManager::release(IntrusiveTracked *object)
+{
+
+}
 
 void RenderManager::releaseResource(RenderResourceId id)
 {
@@ -41,7 +53,7 @@ void RenderManager::releaseResource(RenderResourceId id)
                                                           mBackendManager, request);
                 if(renderTask!= nullptr)
                 {
-                    succesfull=mRequestQueue.post(Task(TaskId(nextTaskId()), RenderTask::taskExec, renderTask));
+                    succesfull=mRequestQueue->post(Task(TaskId(nextTaskId()), RenderTask::taskExec, renderTask));
                     if(succesfull)
                         mResourceMap.erase(found);
                 }
@@ -82,7 +94,7 @@ RenderResourceId RenderManager::allocateResource(ResourceType type,RenderBufferM
                                                                   request);
             if(renderTask!= nullptr)
             {
-                succesfull=mRequestQueue.post(Task(TaskId(nextTaskId()), RenderTask::taskExec, renderTask));
+                succesfull=mRequestQueue->post(Task(TaskId(nextTaskId()), RenderTask::taskExec, renderTask));
                 if(succesfull)
                     mResourceMap.insert(rde::make_pair(id.uid(), RenderResourceIdBuffer(id)));
             }
@@ -130,7 +142,7 @@ RenderResourceIdBuffer RenderManager::memoryBuffer(RenderResourceId id)
 
 void RenderManager::processBackendUpdates(bool blocking)
 {
-    size_t count=mResponseQueue.get(mTaskBuffer,32,blocking);
+    size_t count=mResponseQueue->get(mTaskBuffer,32,blocking);
     if(count>0)
     {
         for(auto &task:mTaskBuffer)

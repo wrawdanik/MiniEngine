@@ -3,16 +3,37 @@
 #include "VertexAttributes.h"
 #include "MiscUtils.h"
 
+
+
 using namespace MiniEngine;
 
+const VertexAttributeDataArray VertexAttribute::Position{VertexAttributeData(VertexBinding::Position,3,RenderData::Float)};
+const VertexAttributeDataArray VertexAttribute::PositionColor{VertexAttributeData(VertexBinding::Position,3,RenderData::Float),
+                                                              VertexAttributeData(VertexBinding::Color,4,RenderData::UByte,RenderBufferMode::Static,true)};
 
-const VertexAttributeArray VertexAttributesList::Position=VertexAttributesList::createPosition();
-const VertexAttributeArray VertexAttributesList::PositionColor=VertexAttributesList::createPositionColor();
-const VertexAttributeArray VertexAttributesList::PositionNormal=VertexAttributesList::createPositionNormal();
-const VertexAttributeArray VertexAttributesList::PositionNormalColor=VertexAttributesList::createPositionNormalColor();
-const VertexAttributeArray VertexAttributesList::PositionNormalUV1=VertexAttributesList::createPositionNormalUV1();
+const VertexAttributeDataArray VertexAttribute::PositionNormal{VertexAttributeData(VertexBinding::Position,3,RenderData::Float),
+                                                              VertexAttributeData(VertexBinding::Normal,3,RenderData::Float,RenderBufferMode::Static,false)};
 
-\
+const VertexAttributeDataArray VertexAttribute::PositionNormalColor{VertexAttributeData(VertexBinding::Position,3,RenderData::Float),
+                                                                     VertexAttributeData(VertexBinding::Normal,3,RenderData::Float,RenderBufferMode::Static,false),
+                                                                     VertexAttributeData(VertexBinding::Normal,3,RenderData::Float,RenderBufferMode::Static,false)};
+
+const VertexAttributeDataArray VertexAttribute::PositionNormalUV1{VertexAttributeData(VertexBinding::Position,3,RenderData::Float),
+                                                                    VertexAttributeData(VertexBinding::Normal,3,RenderData::Float,RenderBufferMode::Static,false),
+                                                                    VertexAttributeData(VertexBinding::UV,2,RenderData::Float,RenderBufferMode::Static,false)};
+
+const VertexAttributeDataArray VertexAttribute::PositionNormalUV2{VertexAttributeData(VertexBinding::Position,3,RenderData::Float),
+                                                                  VertexAttributeData(VertexBinding::Normal,3,RenderData::Float,RenderBufferMode::Static,false),
+                                                                  VertexAttributeData(VertexBinding::UV,2,RenderData::Float,RenderBufferMode::Static,false),
+                                                                  VertexAttributeData(VertexBinding::UV,2,RenderData::Float,RenderBufferMode::Static,false)};
+
+const VertexAttributeDataArray VertexAttribute::PositionUV1{VertexAttributeData(VertexBinding::Position,3,RenderData::Float),
+                                                                  VertexAttributeData(VertexBinding::UV,2,RenderData::Float,RenderBufferMode::Static,false)};
+
+const VertexAttributeDataArray VertexAttribute::PositionUV2{VertexAttributeData(VertexBinding::Position,3,RenderData::Float),
+                                                            VertexAttributeData(VertexBinding::UV,2,RenderData::Float,RenderBufferMode::Static,false),
+                                                            VertexAttributeData(VertexBinding::UV,2,RenderData::Float,RenderBufferMode::Static,false)};
+
 
 VertexAttributesList::VertexAttributesList(RenderManager* manager,const VertexAttributeDataArray &data):VertexAttributesList(manager,&data[0],data.size())
 {
@@ -32,42 +53,7 @@ VertexAttributesList::VertexAttributesList(RenderManager* manager,const VertexAt
 
 
 
-void VertexAttributesList::addPosition(VertexAttributeArray &array)
-{
-    size_t offset=0;
-    
-    if(!array.empty())
-        offset=static_cast<ptrdiff_t>(array[array.size()-1].offset());
-    array.push_back(VertexAttribute(VertexAttributeData(VertexBinding::Position,3,RenderData::Float),offset+3*sizeof(float)));
-}
 
-
-void VertexAttributesList::addColor(VertexAttributeArray &array)
-{
-    size_t offset=0;
-    
-    if(!array.empty())
-		offset=static_cast<ptrdiff_t>(array[array.size()-1].offset());
-    array.push_back(VertexAttribute(VertexAttributeData(VertexBinding::Color,4,RenderData::UByte,RenderBufferMode::Static,true),offset+4));
-}
-
-void VertexAttributesList::addNormal(VertexAttributeArray &array)
-{
-    size_t offset=0;
-    
-    if(!array.empty())
-		offset=static_cast<ptrdiff_t>(array[array.size()-1].offset());
-    array.push_back(VertexAttribute(VertexAttributeData(VertexBinding::Normal,3,RenderData::Float,RenderBufferMode::Static,false),offset+3*sizeof(float)));
-}
-
-void VertexAttributesList::addUV(VertexAttributeArray &array)
-{
-    size_t offset=0;
-    
-    if(!array.empty())
-		offset=static_cast<ptrdiff_t>(array[array.size()-1].offset());
-    array.push_back(VertexAttribute(VertexAttributeData(VertexBinding::UV,2,RenderData::Float,RenderBufferMode::Static,false),offset+2*sizeof(float)));
-}
 
 void VertexAttributesList::updateAfterModification()
 {
@@ -136,49 +122,6 @@ void VertexAttributesList::calculateStrideAndIndex(VertexAttributeArray &array)
     }
 }
 
-VertexAttributeArray VertexAttributesList::createPosition()
-{
-    VertexAttributeArray array;
-    addPosition(array);
-    return array;
-}
 
-VertexAttributeArray VertexAttributesList::createPositionColor()
-{
-    VertexAttributeArray array;
-    addPosition(array);
-    addColor(array);
-    calculateStrideAndIndex(array);
-    return array;
-}
-
-VertexAttributeArray VertexAttributesList::createPositionNormal()
-{
-    VertexAttributeArray array;
-    addPosition(array);
-    addNormal(array);
-    calculateStrideAndIndex(array);
-    return array;
-}
-
-VertexAttributeArray VertexAttributesList::createPositionNormalColor()
-{
-    VertexAttributeArray array;
-    addPosition(array);
-    addNormal(array);
-    addColor(array);
-    calculateStrideAndIndex(array);
-    return array;
-}
-
-VertexAttributeArray VertexAttributesList::createPositionNormalUV1()
-{
-    VertexAttributeArray array;
-    addPosition(array);
-    addNormal(array);
-    addUV(array);
-    calculateStrideAndIndex(array);
-    return array;
-}
 
 

@@ -51,16 +51,6 @@ Platform::Platform()
 
 }
 
-constexpr size_t Platform::vertexAlignment()
-{
-    return 4;
-}
-
-
-constexpr size_t Platform::backendBufferInstances()
-{
-    return 3;
-}
 
 
 rde::string Platform::computerName()

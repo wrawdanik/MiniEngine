@@ -20,6 +20,12 @@ namespace MiniEngine
         {
             renderPrimitive=RenderPrimitive::Triangle;
         }
+
+        VertexBufferDescriptor(const VertexAttributeDataArray &vArray,const BufferItemRange &range, RenderPrimitive primitive):attributes(vArray),range(range)
+        {
+            renderPrimitive=primitive;
+        }
+
         inline bool isValid() const
         {
             return (!range.isEmpty() && !attributes.empty());

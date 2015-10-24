@@ -21,7 +21,15 @@ namespace MiniEngine
             mode=RenderBufferMode::Static;
             clientSide=false;
         }
-        
+
+        IndexBufferDescriptor(const BufferItemRange &iRange,RenderData iType=RenderData::UShort,RenderBufferMode mode=RenderBufferMode::Static):range(iRange),
+                                                                                                                                               indexType(iType),
+                                                                                                                                               mode(mode)
+        {
+            stride = DataTypes::sizeInBytes(indexType);
+        }
+
+
         inline bool isValid() const
         {
             return (!range.isEmpty() && stride!=0);

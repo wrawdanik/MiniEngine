@@ -686,19 +686,19 @@ AABoundingBox::AABoundingBox(unsigned char *points, size_t numPoints,size_t stri
 
 void AABoundingBox::createFromPoints(unsigned char *points, size_t numPoints,size_t stride, size_t offset)
 {
-	this->min.x=FLT_MAX;
-	this->min.y=FLT_MAX;
-	this->min.z=FLT_MAX;
+	this->min.x=std::numeric_limits<float>::max();
+	this->min.y=std::numeric_limits<float>::max();
+	this->min.z=std::numeric_limits<float>::max();
 
-	this->max.x=-FLT_MAX;
-	this->max.y=-FLT_MAX;
-	this->max.z=-FLT_MAX;
+	this->max.x=-std::numeric_limits<float>::max();
+	this->max.y=-std::numeric_limits<float>::max();
+	this->max.z=-std::numeric_limits<float>::max();
 
 
 	unsigned char* tmpPoints=points;
 	tmpPoints+=offset;
 
-	for (int i=1; i<numPoints; i++)
+	for (size_t i=1; i<numPoints; i++)
 	{		
 		Vector3 *tmp=(Vector3*)tmpPoints;
 		Vector3::createMin(this->min, *tmp,this->min);

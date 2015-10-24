@@ -147,7 +147,7 @@ namespace MiniEngine
 
 		AABoundingBox(const BoundingSphere& sphere);
         
-        AABoundingBox(unsigned char *points, size_t numPoints,size_t stride, size_t offset);
+        AABoundingBox(unsigned char *points, size_t numPoints,size_t stride, size_t offset=0);
 
 		inline void merge(const AABoundingBox& other)
 		{
@@ -173,7 +173,7 @@ namespace MiniEngine
  
 		
 		void transform(const Matrix4 &mat);									// tested
-		void createFromPoints(unsigned char *points, size_t numPoints,size_t stride, size_t offset);
+		void createFromPoints(unsigned char *points, size_t numPoints,size_t stride, size_t offset=0);
 
 		inline void setNull() { min=Vector3::One; max=Vector3::NegOne;}
 

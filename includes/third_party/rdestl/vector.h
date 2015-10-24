@@ -5,6 +5,9 @@
 #include "algorithm.h"
 #include "allocator.h"
 #include <stdio.h>
+
+#include <initializer_list>
+
 namespace rde
 {
 //=============================================================================
@@ -160,6 +163,18 @@ public:
 		other.m_capacityEnd= nullptr;
 	}
 
+	vector(std::initializer_list<T> init, const allocator_type& allocator = allocator_type()):	TStorage(allocator)
+	{
+		if(init.size() == 0) // nothing to do
+			return;
+		this->reallocate_discard_old(init.size());
+		rde::copy_construct_n(const_cast<T*>(init.begin()), init.size(), m_begin);
+		m_end = m_begin + init.size();
+		TStorage::record_high_watermark();
+		RDE_ASSERT(invariant());
+	}
+
+
 	vector& operator=(vector&& other)
 	{
 		if (this!=&other)
@@ -174,10 +189,11 @@ public:
 			other.m_end= nullptr;
 			other.m_capacityEnd= nullptr;
 		}
-
 		return *this;
-
 	}
+
+
+
 
 
 	// @note:	allocator is not copied!

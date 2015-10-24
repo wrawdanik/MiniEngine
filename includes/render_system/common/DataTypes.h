@@ -263,7 +263,16 @@ namespace MiniEngine
             bits[2]=(char)((value>>32)&0xFF0000);
             bits[3]=(char)((value>>32)&0xFF000000);
         }
-        
+
+
+        static PixelFormat BGRA_8888()
+        {
+            return PixelFormat("BGRA","8888");
+        }
+
+    private:
+
+
         uint64_t value;
         
 

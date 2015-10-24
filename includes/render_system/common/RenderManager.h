@@ -3,12 +3,12 @@
 
 #include "RenderResourceId.h"
 #include "Status.h"
-#include "blockingconcurrentqueue.h"
 #include "ObjectPool.h"
 #include "RenderTask.h"
-#include "TaskQueue.h"
 #include "UserTask.h"
 #include "UserTaskQueue.h"
+#include "RenderTarget.h"
+#include "RenderDefaults.h"
 
 namespace MiniEngine
 {
@@ -20,7 +20,8 @@ namespace MiniEngine
 
     };
 
-
+    class TaskQueue;
+    class Executor;
 
 
 
@@ -33,12 +34,12 @@ namespace MiniEngine
 
     public:
 
-        RenderManager(const RenderManagerDescriptor &descriptor);
+        RenderManager(const RenderManagerDescriptor &descriptor,RenderTargetPtr defaultTarget);
 
-        virtual ~RenderManager() = 0;
+        virtual ~RenderManager();
 
         RenderResourceId allocateResource
-                (ResourceType type, RenderBufferMode mode, size_t sizeInBytes, RenderBufferSource source = RenderBufferSource::Server, size_t instanceCount = Platform::backendBufferInstances());
+                (ResourceType type, RenderBufferMode mode, size_t sizeInBytes, RenderBufferSource source = RenderBufferSource::Server, size_t instanceCount = RenderDefaults::backendBufferInstances());
 
         RenderResourceIdBuffer memoryBuffer(RenderResourceId id);
 
@@ -46,12 +47,20 @@ namespace MiniEngine
         UserTaskFuture submitUserTask(const UserTask &task);
 
 
+        inline RenderTargetPtr defaultTarget()
+        {
+            return mDefaultTarget;
+        }
+
         RenderManagerDescriptor descriptor() const
         { return mDescriptor; }
 
-    protected:
 
         virtual void release(IntrusiveTracked *object);
+
+    protected:
+
+
 
         RenderManager()
         {
@@ -116,8 +125,8 @@ namespace MiniEngine
 
 
         Executor *mRenderer;
-        TaskQueue mRequestQueue;
-        TaskQueue mResponseQueue;
+        TaskQueue *mRequestQueue;
+        TaskQueue *mResponseQueue;
 
         TaskArray mTaskBuffer;
 
@@ -129,6 +138,8 @@ namespace MiniEngine
         uint32_t mLastTaskId;
 
         RenderTaskTrackMap mRenderTaskTrackMap;
+
+        RenderTargetPtr mDefaultTarget;
     };
 
 

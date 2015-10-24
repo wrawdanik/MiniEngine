@@ -10,6 +10,13 @@
 
 namespace MiniEngine
 {
+/*
+ *  RenderResourceIdBufferLock describines resource with service side buffer that can have a list of UserTasks assigned to it
+ *  It contains RenderResourceIdBuffer and  UserTaskQueueEntryList
+ *
+ *
+ */
+
 
     class UserTaskQueueEntry : public rde::intrusive_list_node
     {
@@ -34,7 +41,10 @@ namespace MiniEngine
         }
 
         UserTask task;
-    };
+        uint64_t finishByFrame;
+     };
+
+
 
 
     class RenderResourceIdBufferLock
@@ -70,6 +80,8 @@ namespace MiniEngine
 
         }
 
+        // Returns client side buffer definition
+
         inline RenderResourceIdBuffer* buffer(RenderResourceId id)
         {
             auto found=mMap.find(id.uid());
@@ -78,6 +90,10 @@ namespace MiniEngine
 
             return nullptr;
         }
+
+        // When user submites a new taks, it is inserted using this method
+        // tasks are batched in list of tasks and at the end of the frame synch, are all submited as a continous array of tasks for that buffer
+        // the job id is added to the list of jobs id that must finish before X frame
 
         inline bool insert(const UserTask &task)
         {
@@ -94,6 +110,8 @@ namespace MiniEngine
             }
             return false;
         }
+
+        // When new buffer is defined, it is inserted using this method
 
         inline void insert(const RenderResourceIdBuffer &buffer)
         {

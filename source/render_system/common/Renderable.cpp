@@ -11,10 +11,7 @@ Renderable::Renderable(RenderManager *manager):Resource(manager)
     
 }
 
-Renderable::~Renderable()
-{
 
-}
 
 
 StatusPtr Renderable::createRenderable(const VertexBufferDescriptor &vertexDesc,const IndexBufferDescriptor &indexDesc)
